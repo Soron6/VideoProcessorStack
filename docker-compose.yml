@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  n8n:
+    image: n8nio/n8n
+    ports:
+      - "5678:5678"
+    volumes:
+      - shared_data:/data
+    environment:
+      # Optional: n8n spezifische Umgebungsvariablen hier definieren.
+      - TZ=Europe/London
+      - GENERIC_TIMEZONE=Europe/London
+      - WEBHOOK_URL=https://regular-calf-formally.ngrok-free.app/
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=none
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=24
+      - DB_SQLITE_VACUUM_ON_STARTUP=true
+      - N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE=true
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - NODE_VERSION=20.18.3
+      - YARN_VERSION=1.22.22
+      - NODE_ICU_DATA=/usr/local/lib/node_modules/full-icu
+      - N8N_VERSION=1.83.2
+      - NODE_ENV=production
+      - N8N_RELEASE_TYPE=stable
+      - SHELL=/bin/sh
+      - N8N_SECURE_COOKIE=false
+
+  video_processor:
+    build: ./video_processor
+    ports:
+      - "5000:5000"
+    volumes:
+      - shared_data:/data
+      # Optional: Lokaler Code-Mount, um die Python-Skripte dynamisch anzupassen
+      #- ./mein_python_code:/app
+
+volumes:
+  shared_data:

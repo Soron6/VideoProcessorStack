@@ -1,0 +1,12 @@
+# Flask wird für den HTTP-Server verwendet
+flask
+
+# moviepy für die Videobearbeitung und -zusammenstellung
+moviepy
+
+# numpy für numerische Berechnungen
+numpy
+
+# Pillow für die Bildverarbeitung
+Pillow
+
