@@ -12,7 +12,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Kopieren Ihrer Skripte (HTTP-Server und Videoverarbeitung)
-COPY server.py video_scripts/*.py ./
+COPY *.py ./
 
 # Starten des HTTP-Servers
 CMD ["python", "server.py"]
