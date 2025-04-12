@@ -3,6 +3,8 @@ import argparse
 import subprocess
 import sys
 import os
+import json
+from datetime import datetime
 
 def get_video_duration(video_file):
     try:
@@ -70,8 +72,6 @@ def main():
                         help="Path to the input video file.")
     parser.add_argument('--music_file', '-a', type=str, required=True,
                         help="Path to the input audio/music file.")
-    parser.add_argument('--output_video', '-o', type=str, required=True,
-                        help="Path where the output video will be saved.")
     parser.add_argument('--fade_duration', '-f', type=float, default=2.0,
                         help="Duration in seconds for the audio fade-out (default: 2.0 seconds).")
     
@@ -85,7 +85,13 @@ def main():
         print(f"Error: Audio file '{args.music_file}' does not exist.")
         sys.exit(1)
     
-    add_audio_to_video(args.input_video, args.music_file, args.output_video, args.fade_duration)
+    # Generate the output file name using current timestamp.
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    output_dir = os.path.join("paws_and_quotes", "cats", "finished")
+    os.makedirs(output_dir, exist_ok=True)
+    output_video = os.path.join(output_dir, f"{timestamp}.mp4")
+    
+    add_audio_to_video(args.input_video, args.music_file, output_video, args.fade_duration)
 
 if __name__ == "__main__":
     main()

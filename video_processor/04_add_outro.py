@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import subprocess
 import sys
 import json
@@ -112,6 +113,10 @@ def run_ffmpeg(video1, video2, part1_end, width, height, fps):
         f"[part1][transition][rest2]concat=n=3:v=1:a=0[outv]"
     )
     
+    # Setze den Ausgabepfad im Verzeichnis /data/results/temp
+    output_file = "/data/results/temp/full_video.mp4"
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
     ffmpeg_cmd = [
         "ffmpeg",
         "-y",
@@ -125,7 +130,7 @@ def run_ffmpeg(video1, video2, part1_end, width, height, fps):
         "-preset", "medium",
         "-pix_fmt", "yuv420p",
         "-an",
-        "full_video.mp4"
+        output_file
     ]
     
     print("[DEBUG] Starte FFmpeg mit folgendem Befehl:")
@@ -138,7 +143,7 @@ def run_ffmpeg(video1, video2, part1_end, width, height, fps):
         sys.exit(1)
     else:
         print("[DEBUG] FFmpeg Ausgabe:", proc.stdout)
-        print("Fertig: output.mp4")
+        print(f"Fertig: {output_file}")
 
 def main():
     if len(sys.argv) != 3:

@@ -1,0 +1,13 @@
+Send a POST request to http://<server_ip>:5000/create_video with the JSON body:
+
+{
+  "input": "input/Cat_Animation.mp4",
+  "text": ["Es gibt zwei", "Möglichkeiten, dem", "Elend der Welt", "zu entfliehen:", "die Musik", "und die Katzen."],
+  "font": "PatricksHand.ttf",
+  "align": "left",
+  "tag": "cats",
+  "text_color": "#ECEFB8",
+  "text_brightness": "0.9",
+  "text_saturation": "0.7",
+  "drop_shadow": "#4A4C2F"
+}

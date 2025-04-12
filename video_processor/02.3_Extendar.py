@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import subprocess
 import sys
 import json
@@ -98,43 +99,30 @@ def run_ffmpeg(still_image, diag, line_thickness, fps):
     blur_y = 20
 
     # The filter_complex creates the animation.
-    # 1. The white bar is generated from a color source of dimensions diag x diag.
-    # 2. The 'geq' filter paints a vertical white strip at the horizontal center,
-    #    where the alpha channel is 255 (opaque) for pixels within half_th distance from center_x,
-    #    and 0 (transparent) elsewhere.
-    # 3. The strip is softened with a boxblur.
-    # 4. It is then rotated by 135° (2.35619 radians) so that it is perpendicular to the motion path.
-    # 5. The overlay is animated with a quadratic easing function, moving from off-screen on the left-bottom
-    #    to the top-right over the time interval t=0.75 to t=1.5.
     filter_complex = (
         f"[1:v]format=rgba,"
-        # Create a vertical white strip at the horizontal center.
         f"geq=r='255':g='255':b='255':"
         f"a='if( lt(abs(X-{center_x}),{half_th}), 255, 0 )',"
         f"boxblur={blur_x}:{blur_y},"
-        # Rotate 135° (2.35619 radians) to align the strip along the diagonal.
         f"rotate=2.35619:ow=rotw(iw):oh=roth(ih):c=0x00000000[feathered_line]; "
 
         f"[0:v]format=rgba[base]; "
         f"[base][feathered_line]overlay="
-        # Animate using quadratic easing:
-        # The x offset moves from -overlay_w (left off-screen) to main_w (right off-screen)
-        # and the y offset moves from main_h (bottom off-screen) to -overlay_h (top off-screen)
-        # during the period between t=0.75 and t=1.5 seconds.
         f"x='-overlay_w+(main_w+overlay_w)*(((t-0.75)/0.75)^2)':"
         f"y='main_h-(main_h+overlay_h)*(((t-0.75)/0.75)^2)':"
         f"enable='between(t,0.75,1.5)'[out]"
     )
+    
+    # Define the output file path and ensure the directory exists.
+    output_file = "/data/results/temp/extended_quote.mp4"
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
     ffmpeg_cmd = [
         "ffmpeg", "-y",
-        # The still image (background) is looped for 4 seconds.
         "-loop", "1",
         "-t", "4",
         "-i", still_image,
         "-f", "lavfi",
-        # Generate the white color overlay video,
-        # now with duration d=0.75 seconds to match the animation timing.
         "-i", f"color=white:s={diag}x{diag}:d=0.75:rate={fps}",
         "-filter_complex", filter_complex,
         "-map", "[out]",
@@ -142,7 +130,7 @@ def run_ffmpeg(still_image, diag, line_thickness, fps):
         "-crf", "18",
         "-preset", "medium",
         "-pix_fmt", "yuv420p",
-        "output.mp4"
+        output_file
     ]
 
     print("[DEBUG] Running ffmpeg to create final output:")
@@ -154,7 +142,7 @@ def run_ffmpeg(still_image, diag, line_thickness, fps):
         sys.exit(1)
     else:
         print("[DEBUG] ffmpeg output:", proc.stdout)
-        print("Finished: output.mp4")
+        print(f"Finished: {output_file}")
 
 def main():
     if len(sys.argv) != 2:

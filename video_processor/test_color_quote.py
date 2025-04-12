@@ -20,10 +20,8 @@ Additionally, the following parameters have been added to adjust the text appear
   --text_saturation: Saturation factor for text color (e.g. 0.7)
   --drop_shadow: Hex color for text drop shadow (e.g. "#4A7D3B")
 
-The final output is stored under:
-  /results/%tag/pics  for image input and 
-  /results/%tag/vids  for video input.
-The output filename is generated based on the current timestamp (e.g. 20230407153000.mp4).
+The final output is now stored at:
+  /data/results/temp/quote.mp4
 
 Usage example:
   python animate.py --input pic.png --text "Line one" "Line two" --font myfont.ttf --align right --tag dogs --debug --text_color "#B9E8A8" --text_brightness 0.85 --text_saturation 0.7 --drop_shadow "#4A7D3B"
@@ -303,12 +301,10 @@ def process_media(input_path, lines, font_path=None, align="left", tag="default"
         base_frame.paste(overlay_img, (x_pos, y_pos), overlay_img)
         return np.array(base_frame.convert("RGB"))
 
-    # Build output file paths based on tag and media type.
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    base_results_dir = os.path.join("results", tag)
-    output_dir = os.path.join(base_results_dir, "vids" if is_video else "pics")
+    # Set output file path to /data/results/temp/quote.mp4
+    output_dir = "/data/results/temp"
     os.makedirs(output_dir, exist_ok=True)
-    output_filename = os.path.join(output_dir, f"{timestamp}.mp4")
+    output_filename = os.path.join(output_dir, "quote.mp4")
     debug(f"Output file will be saved as: {output_filename}")
 
     # Create the background clip.

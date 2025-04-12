@@ -34,7 +34,7 @@ def main():
         "-safe", "0",          # Allow unsafe file paths
         "-i", list_file,
         "-c", "copy",          # Copy streams without re-encoding
-        "quote_complete.mp4"
+        "/data/results/temp/quote_complete.mp4"
     ]
     
     print("Running command:")
@@ -46,7 +46,7 @@ def main():
         print(proc.stderr)
         sys.exit(1)
     else:
-        print("Concatenation completed successfully. Output saved as 'quote_complete.mp4'")
+        print("Concatenation completed successfully. Output saved as '/data/results/temp/quote_complete.mp4'")
     
     # Clean up the temporary file
     os.remove(list_file)

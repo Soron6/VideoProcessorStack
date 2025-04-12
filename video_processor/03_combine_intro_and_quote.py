@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import subprocess
 import sys
 import json
@@ -81,6 +82,10 @@ def run_ffmpeg(video1, video2, offset, width, height, fps):
         f"[tmp]format=yuv420p[vout]"
     )
 
+    # Setze den Ausgabepfad im Verzeichnis /data/results/temp
+    output_file = "/data/results/temp/intro_and_quote.mp4"
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
     ffmpeg_cmd = [
         "ffmpeg",
         "-y",                           # vorhandene Dateien überschreiben
@@ -94,7 +99,7 @@ def run_ffmpeg(video1, video2, offset, width, height, fps):
         "-preset", "medium",
         "-pix_fmt", "yuv420p",          # globale Einstellung, um yuv420p sicherzustellen
         "-an",                         # keine Audioverarbeitung
-        "intro_and_quote.mp4"
+        output_file
     ]
     
     print("Starte ffmpeg mit folgendem Befehl:")
@@ -112,7 +117,7 @@ def run_ffmpeg(video1, video2, offset, width, height, fps):
             print(f"ffmpeg returned with Fehlercode {proc.returncode}")
             sys.exit(1)
         else:
-            print("Das Ausgabevideo wurde als 'output.mp4' gespeichert.")
+            print(f"Das Ausgabevideo wurde als '{output_file}' gespeichert.")
             
     except Exception as e:
         print("Fehler bei der Ausführung von ffmpeg:")
