@@ -11,4 +11,6 @@ services:
       #- ./mein_python_code:/app
 
 volumes:
-  shared_data:
+  shared__n8n_video_store:
+    external: true
+
