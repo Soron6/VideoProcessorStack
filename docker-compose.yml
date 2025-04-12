@@ -6,7 +6,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - shared_n8n_video_store:/data
+      - shared__n8n_video_store:/data
       # Optional: Lokaler Code-Mount, um die Python-Skripte dynamisch anzupassen
       #- ./mein_python_code:/app
 
