@@ -13,7 +13,7 @@ def main():
                         help="One or more text arguments (e.g., 'Es gibt zwei' 'Möglichkeiten, dem' ...)")
     parser.add_argument("--font", required=True,
                         help="Path to the font file (e.g., PatricksHand.ttf)")
-    parser.add_argument("--align", required=True,/paws_and_quotes/cats/Intro_Outro/
+    parser.add_argument("--align", required=True,
                         help="Text alignment (e.g., left or right)")
     parser.add_argument("--tag", required=True,
                         help="Tag to create output subfolder (e.g., cats)")
